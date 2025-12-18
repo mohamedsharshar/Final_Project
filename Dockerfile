@@ -7,6 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# تثبيت المكتبات اللازمة لـ OpenCV و Paddle و PDF
 RUN apt-get update && apt-get install -y --no-install-recommends \
     poppler-utils \
     libgl1 \
@@ -19,6 +20,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# تحميل الموديلات مسبقاً (اختياري، لكن يفضل لعدم التحميل عند التشغيل)
+# هنا نعتمد على التحميل عند أول طلب داخل الكود لتبسيط الـ Dockerfile
 
 COPY main.py .
 
