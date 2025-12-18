@@ -29,16 +29,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def startup_event():
+    print("Server started. OCR models will be loaded lazily on first request.")
+
 
 def get_models():
-    """Lazy load PaddleX models."""
     global paddle_detector, paddle_recognizer
-    
+
     if paddle_detector is None or paddle_recognizer is None:
-        from paddlex import create_model
-        paddle_detector = create_model("PP-OCRv5_server_det")
-        paddle_recognizer = create_model("arabic_PP-OCRv5_mobile_rec")
-    
+        try:
+            from paddlex import create_model
+            print("Loading PaddleX OCR models...")
+            paddle_detector = create_model("PP-OCRv5_server_det")
+            paddle_recognizer = create_model("arabic_PP-OCRv5_mobile_rec")
+            print("Models loaded.")
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"OCR models failed to load: {str(e)}"
+            )
+
     return paddle_detector, paddle_recognizer
 
 
