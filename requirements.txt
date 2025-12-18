@@ -2,9 +2,9 @@ fastapi
 uvicorn[standard]
 python-multipart
 pillow
-numpy<2.0.0
-opencv-python
-opencv-contrib-python
+numpy==1.24.4
+opencv-contrib-python==4.10.0.84
 pdf2image
+pypdfium2
 paddlepaddle==2.6.2
 paddlex==3.0.1
